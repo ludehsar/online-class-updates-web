@@ -6,9 +6,11 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import CenterFocusStrongIcon from '@material-ui/icons/CenterFocusStrong';
 import EventIcon from '@material-ui/icons/Event';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
+import PersonIcon from '@material-ui/icons/Person';
 
 import './App.css';
 import { firebaseAuthProvider, firestoreProvider } from './firestoreProvider.d';
+import { JoinClassesCreate, JoinClassesEdit, JoinClassesListAsAdmin, JoinClassesListAsUser } from './views/join-classes';
 import { AnnouncementList } from './views/announcements';
 
 const App = () => {
@@ -16,8 +18,8 @@ const App = () => {
     <Admin authProvider={firebaseAuthProvider} dataProvider={firestoreProvider}>
       {permissions => [
         permissions === 'admin' ?
-          <Resource name="join_classes" list={ListGuesser} icon={ComputerIcon} show={ShowGuesser} /> :
-          <Resource name="join_classes" list={ListGuesser} icon={ComputerIcon} />,
+          <Resource name="join_classes" list={JoinClassesListAsAdmin} icon={ComputerIcon} show={ShowGuesser} create={JoinClassesCreate} edit={JoinClassesEdit} /> :
+          <Resource name="join_classes" list={JoinClassesListAsUser} icon={ComputerIcon} show={ShowGuesser} />,
         
         permissions === 'admin' ?
           <Resource name="exams" list={ListGuesser} icon={CenterFocusStrongIcon} show={ShowGuesser} /> :
@@ -40,8 +42,8 @@ const App = () => {
           <Resource name="routines" list={ListGuesser} icon={EventIcon} />,
         
         permissions === 'admin' ?
-        <Resource name="users" list={ListGuesser} icon={EventIcon} show={ShowGuesser} /> :
-        null
+          <Resource name="users" list={ListGuesser} icon={PersonIcon} show={ShowGuesser} /> :
+          null
       ]}
     </Admin>
   );

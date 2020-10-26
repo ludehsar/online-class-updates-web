@@ -66,10 +66,6 @@ async function uploadFileToBucket(rawFile, storageRef) {
             console.log('Uploaded file !');
             // Add url
             return storageRef.getDownloadURL();
-        })
-        .catch( (error) => { 
-            console.log(error);
-            throw new Error( { message: error.message_ , status:401} ) 
         });
 }
 
@@ -144,9 +140,6 @@ export const firestoreProvider = (type, resource, params) => {
                             } else {
                                 throw new Error({ message:'No such doc', status: 404});
                             }
-                        })
-                        .catch( error => {
-                            throw new Error({ message:error, status:404});
                         });
         }
             
@@ -278,13 +271,12 @@ export const firebaseAuthProvider = async (type, params) => {
     if (type === AUTH_LOGIN) {
         const { username, password } = params;
         return firebase.auth()
-                    .signInWithEmailAndPassword(username, password)
-                    .catch( (error) => { throw new Error({ message:error.message, status: 401}) } )
+                    .signInWithEmailAndPassword(username, password);
+                    
     }
     
     if (type === AUTH_LOGOUT) {
-        return firebase.auth().signOut()
-            .catch( (error) => { throw new Error({ message:error.message, status: 500}) } );
+        return firebase.auth().signOut();
     }
 
     if (type === AUTH_CHECK) {
@@ -303,7 +295,6 @@ export const firebaseAuthProvider = async (type, params) => {
             if (doc.exists) {
                 return Promise.resolve(doc.data().role);
             } else {
-                console.log("not found");
                 return Promise.resolve('user');
             }
         }
